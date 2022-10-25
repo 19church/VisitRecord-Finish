@@ -13,10 +13,11 @@ type User struct {
 	UserType_ID *uint
 	UserType    UserType `gorm:"references:id"`
 
-	Patient []Patient `gorm:"ForeignKey:User_ID"`
-	Triage  []Triage  `gorm:"ForeignKey:User_ID"`
-	Symptom []Symptom `gorm:"ForeignKey:Check"`
-	Manage  []Manage  `gorm:"ForeignKey:User_ID"`
+	Patient      []Patient     `gorm:"ForeignKey:User_ID"`
+	Triage       []Triage      `gorm:"ForeignKey:User_ID"`
+	Symptom      []Symptom     `gorm:"ForeignKey:Check"`
+	Manage       []Manage      `gorm:"ForeignKey:User_ID"`
+	VisitRecords []VisitRecord `gorm:"ForeignKey:UserID"`
 }
 
 type UserType struct {

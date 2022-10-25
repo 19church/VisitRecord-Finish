@@ -100,7 +100,7 @@ function ResponsiveAppBar_02() {
 
             noWrap
             component="a"
-            href="/mappingbedcreate"
+            href="/VisitRecordCreate"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },

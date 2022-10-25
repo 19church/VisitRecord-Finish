@@ -75,17 +75,15 @@ func main() {
 
 	// ================= 04 ======================================
 	//===========Level===========
-	r.POST("/CreateLevel",controller.CreateLevel)
-	r.GET("/GetListLevels",controller.ListLevel)
-	r.GET("/GetLevel/:id",controller.GetLevel)
+	r.POST("/CreateLevel", controller.CreateLevel)
+	r.GET("/GetListLevels", controller.ListLevel)
+	r.GET("/GetLevel/:id", controller.GetLevel)
 
 	//=========== Main Table Symptom ===========
-	r.POST("/CreateSymptom",controller.CreateSymptom)
-	r.GET("/GetListSymptoms",controller.ListSymptom)
-	r.GET("/GetSymptom/:id",controller.GetSymptom)
+	r.POST("/CreateSymptom", controller.CreateSymptom)
+	r.GET("/GetListSymptoms", controller.ListSymptom)
+	r.GET("/GetSymptom/:id", controller.GetSymptom)
 	//=========== Main Table Symptom ===========
-	
-	
 
 	// ====================== 05 ===============================
 
@@ -100,6 +98,21 @@ func main() {
 	// login User Route
 	r.POST("/login", controller.Login)
 	r.GET("/user/:id", controller.GetUser)
+
+	//  TODO ==================== 07 ==========================
+	// POST /visitrecord
+	r.POST("/CreateVisitRecord", controller.CreateVisitRecord)
+	// GET /visitrecord/:id
+	r.GET("/GetVisitRecord/:id", controller.GetVisitRecord)
+	// GET /visitrecord
+	r.GET("/ListVisitRecords", controller.ListVisitRecords)
+
+	// POST /visitortypes
+	r.POST("/CreateVisitorType", controller.CreateVisitorType)
+	// GET /visitortype/:id
+	r.GET("/GetVisitorType/:id", controller.GetVisitorType)
+	// GET / visitortype
+	r.GET("/ListVisitorTypes", controller.ListVisitorTypes)
 
 	r.Run()
 }

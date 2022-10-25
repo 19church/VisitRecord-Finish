@@ -1,15 +1,15 @@
 package controller
 
 import (
-
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/panupongKanin/ProjectSA-arm/entity"
 )
 
 // POST Map_Bed
 
-func 	CreateMapBed(c *gin.Context){
+func CreateMapBed(c *gin.Context) {
 
 	var triage entity.Triage
 	var bed entity.Bed
@@ -42,9 +42,9 @@ func 	CreateMapBed(c *gin.Context){
 
 	// 14: สร้าง Mapbed
 	mb := entity.Map_Bed{
-		Triage_ID: map_bed.Triage_ID,         	// โยงความสัมพันธ์กับ Entity Triage
-		Admidtime: map_bed.Admidtime, 		// ตั้งค่าฟิลด์ Admidtime
-		Bed_ID:    map_bed.Bed_ID,                // โยงความสัมพันธ์กับ Entity Bed
+		Triage_ID:      map_bed.Triage_ID, // โยงความสัมพันธ์กับ Entity Triage
+		Admidtime:      map_bed.Admidtime, // ตั้งค่าฟิลด์ Admidtime
+		Bed_ID:         map_bed.Bed_ID,    // โยงความสัมพันธ์กับ Entity Bed
 		MapBed_Comment: map_bed.MapBed_Comment,
 		//User_ID: map_bed.User_ID,               // โยงความสัมพันธ์กับ Entity User
 	}
@@ -62,9 +62,9 @@ func 	CreateMapBed(c *gin.Context){
 func GetMapBed(c *gin.Context) {
 	var GetMapBed entity.Map_Bed
 	id := c.Param("id")
-	if err := entity.DB().Preload("Bed.Zone").Preload("Triage.Patient.Gender").Preload("Triage.Disease.DiseaseType").Preload("Triage.Ipd").Raw("SELECT * FROM map_beds WHERE id = ?", id).Scan(&GetMapBed).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+	if err := entity.DB().Preload("Bed.Zone").Preload("Triage.Patient.Gender").Preload("Triage.Disease.DiseaseType").Preload("Triage.InpantientDepartment").Raw("SELECT * FROM map_beds WHERE id = ?", id).Find(&GetMapBed).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": GetMapBed})
 }
@@ -75,27 +75,25 @@ func UpdateTriagestate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := entity.DB().Model(triage).Where("id = ?", triage.ID).Update("Triage_State",triage.Triage_State).Error; err != nil {
+	if err := entity.DB().Model(triage).Where("id = ?", triage.ID).Update("Triage_State", triage.Triage_State).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": triage})
 }
 
-
 // GET /mapbeds
 // return ไปให้เพื่อน
 func GetListMapBeds(c *gin.Context) {
 	var GetMapBeds []entity.Map_Bed
 	if err := entity.DB().Preload("Bed.Zone").Preload("Triage.Patient.Gender").Preload("Triage.Disease.DiseaseType").Preload("Triage.InpantientDepartment").Raw("SELECT * FROM map_beds").Find(&GetMapBeds).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": GetMapBeds})
 }
 
-
-func 	CreateZone(c *gin.Context){
+func CreateZone(c *gin.Context) {
 
 	var zone entity.Zone
 	if err := c.ShouldBindJSON(&zone); err != nil {
@@ -116,8 +114,8 @@ func GetZone(c *gin.Context) {
 	var zone entity.Zone
 	id := c.Param("id")
 	if err := entity.DB().Raw("SELECT * FROM zones WHERE id = ?", id).Scan(&zone).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": zone})
 }
@@ -126,14 +124,14 @@ func GetZone(c *gin.Context) {
 func ListZones(c *gin.Context) {
 	var zones []entity.Zone
 	if err := entity.DB().Raw("SELECT * FROM zones").Scan(&zones).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": zones})
 }
 
 // POST Bed
-func CreateBed(c *gin.Context){
+func CreateBed(c *gin.Context) {
 	var bed entity.Bed
 	if err := c.ShouldBindJSON(&bed); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -152,8 +150,8 @@ func GetBedName(c *gin.Context) {
 	var bed entity.Bed
 	id := c.Param("id")
 	if err := entity.DB().Raw("SELECT bed_name FROM beds WHERE id = ?", id).Scan(&bed).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": bed})
 }
@@ -163,8 +161,8 @@ func GetBed_by_zone(c *gin.Context) {
 	var bed_by_zone []entity.Bed
 	zone_id := c.Param("zoneid")
 	if err := entity.DB().Raw("SELECT * FROM beds WHERE Zone_ID = ? AND Bed_State = 0", zone_id).Scan(&bed_by_zone).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": bed_by_zone})
 }
@@ -173,8 +171,8 @@ func GetBed_by_zone(c *gin.Context) {
 func ListBeds(c *gin.Context) {
 	var beds []entity.Bed
 	if err := entity.DB().Preload("Zone").Raw("SELECT * FROM beds").Find(&beds).Error; err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		 return
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": beds})
 }
@@ -185,7 +183,7 @@ func UpdateBedstate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := entity.DB().Model(bed).Where("id = ?", bed.ID).Update("Bed_State",bed.Bed_State).Error; err != nil {
+	if err := entity.DB().Model(bed).Where("id = ?", bed.ID).Update("Bed_State", bed.Bed_State).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

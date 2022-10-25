@@ -123,6 +123,8 @@ function HomePage_01() {
                                     <Grid item xs={6} md={3}>
                                           <Card sx={{ maxWidth: 345 }}>
                                                 <CardActionArea
+                                                      component={RouterLink}
+                                                      to="/VisitRecordCreate"
                                                       sx={{ backgroundColor: "#FDDD8E" }}>
                                                       <CardMedia
                                                             component="img"
