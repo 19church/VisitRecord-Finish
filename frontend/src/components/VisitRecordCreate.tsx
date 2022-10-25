@@ -271,7 +271,7 @@ export default function VisitRecordCreate() {
                 fontFamily="Arial"
               >
                 <hr color="Green" />
-                <b>ระบบเพิ่มข้อมูลการเข้าเยี่ยมผู้ป่วย</b>
+                <b>ระบบเพิ่มข้อมูลการเข้าเยี่ยมคนไข้ใน</b>
                 <hr color="Green" />
               </Typography>
             </Box>
